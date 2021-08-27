@@ -70,11 +70,17 @@ def biDirectionalBFS(src, goal):
     return []
 
 def main():
-    srcBoard = Board((("4", "6", "1"), ("_", "2", "8"), ("7", "3", "5")))
-    goalBoard = Board((("1", "2", "3"), ("4", "_", "6"), ("7", "8", "5")))
+    srcBoard = Board((("4", "6", "1"), ("3", "2", "8"), ("7", "_", "5")))
+    goalBoard = Board((("_", "1", "2"), ("3", "4", "5"), ("6", "7", "8")))
     path = biDirectionalBFS(srcBoard, goalBoard)
-    for x in path:
-        x.print()
+    if path:
+        print("Moves required to solve :" ,len(path)-1,"\n")
+        print("The board states are as follows (move 0 is source board):\n ")
+        i = 0
+        for x in path:
+            print("Move ",i,": ")
+            x.print()
+            i+=1
 
 
 if __name__ == "__main__":
