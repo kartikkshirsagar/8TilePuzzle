@@ -33,7 +33,8 @@ def constructPath(node, src, goal, visited, type):
     return path
 
 
-def biDirectionalBFS(src, goal):
+def biDirectionalBFS(src, goal,lens):
+    print("Calculating...")
     visited = set()
     reverseVisited = set()
     queue = []
@@ -46,6 +47,8 @@ def biDirectionalBFS(src, goal):
         poppedF = queue.pop(0)
         if checkVisited(poppedF, reverseVisited):
             # we got the connected node
+            lens.append(len(visited))
+            lens.append(len(reverseVisited))
             return constructPath(poppedF, src, goal, reverseVisited, 1)
         visited.add(poppedF)
         neighbours = poppedF.getNeighbours()
@@ -58,6 +61,8 @@ def biDirectionalBFS(src, goal):
         poppedR = reverseQ.pop(0)
         if checkVisited(poppedR, visited):
             # got goal
+            lens.append(len(visited))
+            lens.append(len(reverseVisited))
             return constructPath(poppedR, src, goal, visited, 2)
 
         reverseVisited.add(poppedR)
@@ -67,12 +72,24 @@ def biDirectionalBFS(src, goal):
                 reverseQ.append(neighbour)
                 reverseVisited.add(neighbour)
     print("This instance of the puzzle is unsolvable.")
+    print("Visited {} states in the forward direction and {} states in the reverse direction".format(len(visited),len(reverseVisited)))
+    print("but could not find a solution.")
     return []
 
 def main():
-    srcBoard = Board((("4", "6", "1"), ("3", "2", "8"), ("7", "_", "5")))
+    lens = []
     goalBoard = Board((("_", "1", "2"), ("3", "4", "5"), ("6", "7", "8")))
-    path = biDirectionalBFS(srcBoard, goalBoard)
+    print("The default goal board is:")
+    goalBoard.print()
+    print("Please enter the source board (space separated values), for blank use _ (an underscore)")
+    print("For eg, one input could be 8 7 6 _ 4 3 2 1 5")
+    inp = input().split()
+    r1 = tuple(inp[0:3])
+    r2 = tuple(inp[3:6])
+    r3 = tuple(inp[6:9])
+    srcBoard = Board((r1, r2, r3))
+   
+    path = biDirectionalBFS(srcBoard, goalBoard,lens)
     if path:
         print("Moves required to solve :" ,len(path)-1,"\n")
         print("The board states are as follows (move 0 is source board):\n ")
@@ -81,7 +98,12 @@ def main():
             print("Move ",i,": ")
             x.print()
             i+=1
+        print("Visited {} states in the forward direction and {} states in the reverse direction".format(lens[0],lens[1]))
+        print("and found a solution")
 
 
 if __name__ == "__main__":
     main()
+
+
+# src config which yields results 4 6 1 _ 2 8 7 3 5
