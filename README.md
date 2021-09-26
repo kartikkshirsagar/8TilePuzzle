@@ -1,1 +1,1 @@
-# 8TilePuzzle
+# 8TilePuzzle Solver
